@@ -1,45 +1,19 @@
-FROM golang:1.22-alpine AS builder
+FROM golang:1.22-alpine
 
-WORKDIR /app
+WORKDIR /mnt
 
-# Install required tools
-RUN apk update && \
-    apk add --no-cache git gcc musl-dev
-
-# Copy go mod and sum files
-COPY go.mod go.sum ./
-
-# Download dependencies
-RUN go mod download
-
-# Copy the source code
-COPY . .
-
-# Build the application
-RUN CGO_ENABLED=0 GOOS=linux go build -o /app/order-service-test ./cmd/api
-
-# Create final lightweight image
-FROM alpine:3.18
-
-WORKDIR /app
-
-# Install necessary packages
-RUN apk update && \
-    apk add --no-cache ca-certificates tzdata postgresql-client && \
+# Install necessary tools
+RUN apk update && apk add --no-cache git ca-certificates tzdata postgresql-client && \
     update-ca-certificates
 
-# Copy the binary from builder
-COPY --from=builder /app/order-service-test /app/order-service-test
 
-# Copy scripts and migrations
-COPY ./scripts/ /app/scripts/
-COPY ./migrations/ /app/migrations/
+# Copy the entire project into /mnt
+COPY . .
 
-# Make scripts executable
-RUN chmod +x /app/scripts/*.sh
+# Download go modules.
+RUN go mod download
 
-# Default port
+# The Dockerfile doesn't build anything here.  The build happens
+# when build.sh is run *inside* the container.
+
 EXPOSE 9090
-
-# Run the application
-CMD ["/app/order-service-test"]
