@@ -145,7 +145,3 @@ The application configuration is loaded from environment variables. The followin
 - `DB_SSLMODE`: The database SSL mode (default: `disable`).
 - `ENV`: The application environment (default: `development`).
 - `LOG_LEVEL`: The log level (default: `info`).
-
-## License
-
-This project is licensed under the MIT License.
