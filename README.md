@@ -22,19 +22,46 @@ This project is an order service application written in Go. It provides APIs to 
 
 ### Using Docker Compose
 
-1. **Build and start the containers:**
+1. **Start the postgres containers:**
 
    ```sh
    docker-compose up --build
    ```
 
-   This command will build the Docker images and start the containers for the application and PostgreSQL database.
+   This command will build the Docker image and start the container for the PostgreSQL database.
 
-2. **Apply database migrations:**
+2. **Build the appluication:**
+
+   ```sh
+   docker run --rm -v $(pwd):/mnt -w /mnt order-service-test /mnt/scripts/build.sh
+   ```
+
+   This script will build the Go application.
+
+3. **Test the application:**
+
+   ```sh
+   docker run --rm -v $(pwd):/mnt -w /mnt order-service-test /mnt/scripts/test.sh
+   ```
+
+   This script will run the tests and generate a coverage report.
+
+4. **Apply database migrations and run the application:**
+
+   ```sh
+   docker run --rm -v $(pwd):/mnt \
+   -e DB_HOST=host.docker.internal \
+   -e DB_PORT=5432 \
+   -e DB_USER=postgres \
+   -e DB_PASSWORD=postgres \
+   -e DB_NAME=order_service \
+   -p 9090:9090 \
+   -w /mnt order-service-test /mnt/scripts/run.sh
+   ```
 
    The `run.sh` script in the `scripts` directory will automatically apply the database migrations when the application container starts.
 
-3. **Access the application:**
+5. **Access the application:**
 
    The application will be accessible at `http://localhost:9090`.
 
