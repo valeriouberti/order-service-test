@@ -145,3 +145,41 @@ The application configuration is loaded from environment variables. The followin
 - `DB_SSLMODE`: The database SSL mode (default: `disable`).
 - `ENV`: The application environment (default: `development`).
 - `LOG_LEVEL`: The log level (default: `info`).
+
+## Design Considerations
+
+This order service project was designed with a microservices mindset, focusing on modularity, maintainability. The service follows a clear separation of concerns across layers—routing, service, and repository—to facilitate ease of testing and future enhancements.
+
+A key design decision was to use Go’s built-in net/http library instead of a more opinionated framework such as Gin. The reasoning behind this was twofold. First, the net/http package offers developers full visibility and control over the HTTP handling pipeline without hidden abstractions, which is vital when building services at scale or under performance constraints. Second, reducing external dependencies for simple project like this, ensuring that the service remains lightweight and straightforward to maintain.
+
+In summary, this design approach was chosen to ensure clarity and efficiency while keeping the code flexible.
+
+## Database Considerations
+
+PostgreSQL was chosen as the database backend due to its robustness, reliability, and extensive feature set. Here are the key reasons for its selection:
+
+- **Stability and Performance:** PostgreSQL offers a high level of data consistency and can efficiently handle complex queries and high transaction volumes, making it ideal for an order service that may scale over time.
+- **ACID Compliance:** With full support for ACID transactions, PostgreSQL ensures that all order-related operations are executed reliably, guaranteeing data integrity even under concurrent access.
+- **Extensibility and Features:** The rich ecosystem of data types, indexing options, and support for custom functions allows for flexible data manipulation and optimizations as the application evolves.
+- **Community and Ecosystem:** Being widely adopted, PostgreSQL benefits from a large community, active development, and frequent updates, which provides a level of assurance and access to a vast array of extensions and tools.
+- **Ease of Integration:** The integration with Go is straightforward via robust PostgreSQL drivers. This minimizes boilerplate code and leverages Docker Compose for easy local provisioning and testing.
+
+## Future Improvements
+
+- **Authentication Middleware:**  
+  Implement an authentication middleware to secure API endpoints. This middleware will validate user tokens or api keys to restrict access based on authorization levels, ensuring that only authenticated users or services can perform sensitive operations.
+
+- **Product Management API:**  
+  Introduce new API endpoints to manage products, including inserting, updating, and deleting product records. This new functionality will enable dynamic updates to the product catalog.
+
+- **Enhanced Error Handling:**  
+  Standardize error responses using custom error objects. This will improve client-side error processing and streamline debugging.
+
+- **API Documentation:**  
+  Integrate tools like Swagger or OpenAPI to generate interactive API documentation, making it easier for developers and external integrators to understand and use the API.
+
+- **Performance & Scalability Enhancements:**  
+  Consider adding database indexing improvements and caching mechanisms to further boost performance as the service scales.
+
+- **Monitoring and Logging:**  
+  Incorporate advanced logging and monitoring solutions to gain deeper insights into application performance and errors, which can aid in proactive troubleshooting.
