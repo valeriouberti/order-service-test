@@ -150,7 +150,7 @@ The application configuration is loaded from environment variables. The followin
 
 This order service project was designed with a microservices mindset, focusing on modularity, maintainability. The service follows a clear separation of concerns across layers—routing, service, and repository—to facilitate ease of testing and future enhancements.
 
-A key design decision was to use Go’s built-in net/http library instead of a more opinionated framework such as Gin. The reasoning behind this was twofold. First, the net/http package offers developers full visibility and control over the HTTP handling pipeline without hidden abstractions, which is vital when building services at scale or under performance constraints. Second, reducing external dependencies for simple project like this, ensuring that the service remains lightweight and straightforward to maintain.
+A key design decision was to use Go’s built-in net/http library instead of a more opinionated framework such as Gin. The reasoning behind this was twofold. First, the net/http package offers developers full visibility and control over the HTTP handling pipeline without hidden abstractions. Second, reducing external dependencies for simple project like this, ensuring that the service remains lightweight and straightforward to maintain.
 
 In summary, this design approach was chosen to ensure clarity and efficiency while keeping the code flexible.
 
